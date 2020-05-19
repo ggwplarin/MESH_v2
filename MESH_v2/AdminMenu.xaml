@@ -9,6 +9,9 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
 
+        
+    
+        
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -53,8 +56,30 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0">
-                            <AppBarButton x:Name="AddNewUserBtn" Label="Add" Click="AddNewUserBtn_Click"/>
-                            <AppBarButton x:Name="DeleteSelectedUser" Label="Delete" Click="DeleteSelectedUser_Click"/>
+                            <AppBarButton x:Name="AddNewUserBtn" Label="Add" Click="AddNewUserBtn_Click" AllowFocusOnInteraction="True" Icon="Add">
+                                <FlyoutBase.AttachedFlyout>
+                                <Flyout x:Name="AddNewUserFlyout"  ShowMode="Standard" LightDismissOverlayMode="On">
+                                        <Grid>
+                                            <StackPanel>
+                                                <TextBox x:Name="AddUserLoginBox" Header="Login" Width="200" Margin="8"/>
+                                                <PasswordBox x:Name="AddUSerPasswordBox" Header="Password" Width="200" Margin="8"/>
+                                                <ComboBox x:Name="AddNewUserRoleCBox" Width="200" Margin="8" Header="Role" SelectionChanged="AddNewUserRoleCBox_SelectionChanged">
+                                                    <x:String>Admin</x:String>
+                                                    <x:String>Teacher</x:String>
+                                                    <x:String>Student</x:String>
+                                                </ComboBox>
+                                                <ComboBox x:Name="AddNewUserGroupCBox" Width="200" Margin="8" Header="Group" IsEnabled="False">
+                                                    
+                                                </ComboBox>
+                                                <Button x:Name="AddUserConfirmBtn" Click="AddUserConfirmBtn_Click" Width="200" Content="Confirm" Margin="8"/>
+            
+                                            </StackPanel>
+                                    </Grid>
+                                </Flyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
+
+                            <AppBarButton x:Name="DeleteSelectedUser" Label="Delete" Click="DeleteSelectedUser_Click" Icon="Delete"/>
                         </StackPanel>
                     
 

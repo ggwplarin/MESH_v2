@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DataAccessLib;
+using Microsoft.Toolkit.Extensions;
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace MESH_v2
@@ -54,7 +55,28 @@ namespace MESH_v2
 
         private void AddNewUserBtn_Click(object sender, RoutedEventArgs e)
         {
-            
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        private void AddUserConfirmBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DataAccessClass.AddUser(AddUserLoginBox.Text,AddUSerPasswordBox.Password,$"{AddNewUserRoleCBox.SelectedIndex}|{AddNewUserGroupCBox.SelectedIndex}");
+            users = DataAccessClass.GetUsers();
+            UsersGrid.ItemsSource = users;
+        }
+
+        
+
+        private void AddNewUserRoleCBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(AddNewUserRoleCBox.SelectedIndex == 2)
+            {
+                AddNewUserGroupCBox.IsEnabled = true;
+            }
+            else
+            {
+                AddNewUserGroupCBox.IsEnabled = false;
+            }
         }
     }
 }
