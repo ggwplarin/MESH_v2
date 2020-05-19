@@ -93,7 +93,24 @@ namespace DataAccessLib
         public static int DeleteUser(int id)
         {
 
+            using (SqliteConnection db =
+                               new SqliteConnection($"Data Source ={dbpath}"))
+            {
+                db.Open();
 
+                String tableCommand = $"DELETE FROM users WHERE id = {id}";
+
+                try
+                {
+                    SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                    command.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    return 1;
+                }
+            }
             return 0;
         }
 

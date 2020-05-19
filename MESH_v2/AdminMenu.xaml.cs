@@ -41,39 +41,20 @@ namespace MESH_v2
             DataAccessClass.AddUser("rrfff", "dsed", "gegggg");
             DataAccessClass.AddUser("jgfff", "ddegd", "gegggg");
             users = DataAccessClass.GetUsers();
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-            users.Add(new User(1, "jgfff", "ddegd", "gegggg"));
-
+           
             this.InitializeComponent();
         }
 
         private void DeleteSelectedUser_Click(object sender, RoutedEventArgs e)
         {
-
+            DataAccessClass.DeleteUser(users[UsersGrid.SelectedIndex].Id);
+            users = DataAccessClass.GetUsers();
+            UsersGrid.ItemsSource = users;
         }
 
         private void AddNewUserBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }
