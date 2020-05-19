@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DataAccessLib;
+using Windows.Storage;
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
 namespace MESH_v2
@@ -24,12 +25,15 @@ namespace MESH_v2
     {
         public MainPage()
         {
+
             
             this.InitializeComponent();
+            gg.Text = ApplicationData.Current.LocalFolder.Path;
         }
 
         private void goAdmin_Click(object sender, RoutedEventArgs e)
         {
+
             this.Frame.Navigate(typeof(AdminMenu));
         }
     }

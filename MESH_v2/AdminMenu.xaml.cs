@@ -31,16 +31,7 @@ namespace MESH_v2
         {
             
             DataAccessClass.InitializeDatabase();
-            DataAccessClass.AddUser("ggff", "dsgd", "gegggg");
-            DataAccessClass.AddUser("grwf", "dsge", "gegggg");
-            DataAccessClass.AddUser("gghgsf", "dsgd", "gegggg");
-            DataAccessClass.AddUser("rrff", "dsed", "gegggg");
-            DataAccessClass.AddUser("jgsff", "ddegd", "gegggg");
-            DataAccessClass.AddUser("ggdff", "dsgd", "gegggg");
-            DataAccessClass.AddUser("grgwf", "dsge", "gegggg");
-            DataAccessClass.AddUser("gghdgsf", "dsgd", "gegggg");
-            DataAccessClass.AddUser("rrfff", "dsed", "gegggg");
-            DataAccessClass.AddUser("jgfff", "ddegd", "gegggg");
+            
             users = DataAccessClass.GetUsers();
            
             this.InitializeComponent();
@@ -60,7 +51,21 @@ namespace MESH_v2
 
         private void AddUserConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-            DataAccessClass.AddUser(AddUserLoginBox.Text,AddUSerPasswordBox.Password,$"{AddNewUserRoleCBox.SelectedIndex}|{AddNewUserGroupCBox.SelectedIndex}");
+            string role = "";
+            string group = "";
+            switch (AddNewUserRoleCBox.SelectedIndex){
+                case 0:
+                    role = "Admin";
+                    break;
+                case 1:
+                    role = "Teacher";
+                    break;
+                case 2:
+                    role = "Student";
+                    group = $"Group №{AddNewUserGroupCBox.SelectedIndex}";
+                    break;
+            }
+            DataAccessClass.AddUser(AddUserLoginBox.Text,AddUSerPasswordBox.Password,role,group);
             users = DataAccessClass.GetUsers();
             UsersGrid.ItemsSource = users;
         }

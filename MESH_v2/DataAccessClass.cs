@@ -23,7 +23,7 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, access TEXT)";
+                String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT)";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
@@ -55,7 +55,7 @@ namespace DataAccessLib
             }
 
         }
-        public static int AddUser(string login, string password, string access)
+        public static int AddUser(string login, string password, string role, string group)
         {
             if (login != "" && password != "")
             {
@@ -64,7 +64,7 @@ namespace DataAccessLib
                 {
                     db.Open();
 
-                    String tableCommand = $"INSERT INTO users(login, password, access) VALUES('{login}', '{password}', '{access}')";
+                    String tableCommand = $"INSERT INTO users(login, password, userRole, userGroup) VALUES('{login}', '{password}', '{role}','{group}')";
 
                     try
                     {
@@ -130,7 +130,7 @@ namespace DataAccessLib
 
                 while (reader.Read())
                 {
-                    users.Add(new MESH_v2.User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                    users.Add(new MESH_v2.User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
                 }
                 return users;
             }

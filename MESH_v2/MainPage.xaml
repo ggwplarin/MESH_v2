@@ -10,5 +10,6 @@
 
     <Grid>
         <Button x:Name="goAdmin" Content="goAdmin"  Click="goAdmin_Click"/>
+        <TextBox x:Name="gg" Height="100" Width="400"/>
     </Grid>
 </Page>
