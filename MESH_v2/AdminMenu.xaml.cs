@@ -15,13 +15,11 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DataAccessLib;
 using Microsoft.Toolkit.Extensions;
-// Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
+
 
 namespace MESH_v2
 {
-    /// <summary>
-    /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
-    /// </summary>
+    
 
     
     public sealed partial class AdminMenu : Page
@@ -65,9 +63,18 @@ namespace MESH_v2
                     group = $"Group №{AddNewUserGroupCBox.SelectedIndex}";
                     break;
             }
-            DataAccessClass.AddUser(AddUserLoginBox.Text,AddUSerPasswordBox.Password,role,group);
-            users = DataAccessClass.GetUsers();
-            UsersGrid.ItemsSource = users;
+            if (AddNewUserRoleCBox.SelectedIndex != -1)
+            {
+                DataAccessClass.AddUser(AddUserLoginBox.Text, AddUSerPasswordBox.Password, role, group);
+                users = DataAccessClass.GetUsers();
+                UsersGrid.ItemsSource = users;
+
+                AddUserLoginBox.Text = "";
+                AddUSerPasswordBox.Password = "";
+                AddNewUserRoleCBox.SelectedIndex = -1;
+                AddNewUserGroupCBox.SelectedIndex = -1;
+                AddNewUserFlyout.Hide();
+            }
         }
 
         

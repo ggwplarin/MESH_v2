@@ -57,6 +57,7 @@ namespace DataAccessLib
         }
         public static int AddUser(string login, string password, string role, string group)
         {
+            
             if (login != "" && password != "")
             {
                 using (SqliteConnection db =
