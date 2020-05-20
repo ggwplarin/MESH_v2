@@ -36,5 +36,24 @@ namespace MESH_v2
 
             this.Frame.Navigate(typeof(AdminMenu));
         }
+
+        private void LoginMenuConfirmBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (LoginMenuLoginBox.Text != "" && LoginMenuPasswordBox.Password != "")
+            {
+                switch( DataAccessClass.ValidateUser(LoginMenuLoginBox.Text, LoginMenuPasswordBox.Password))
+                {
+                    case 0:
+                        this.Frame.Navigate(typeof(AdminMenu));
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }

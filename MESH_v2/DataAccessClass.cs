@@ -31,7 +31,7 @@ namespace DataAccessLib
             }
         }
 
-        public static bool ValidateUser(string login, string password)
+        public static int ValidateUser(string login, string password)
         {
             
             using (SqliteConnection db =
@@ -46,12 +46,12 @@ namespace DataAccessLib
                 SqliteDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    return true;
+                    if (reader.GetString(3) == "Admin") return 0;
+                    if (reader.GetString(3) == "Teacher") return 1;
+                    if (reader.GetString(3) == "Student") return 2;
                 }
-                else
-                {
-                    return false;
-                }
+                
+                return -1;
             }
 
         }
