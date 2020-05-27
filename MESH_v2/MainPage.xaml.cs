@@ -26,7 +26,7 @@ namespace MESH_v2
         public MainPage()
         {
 
-            
+            DataAccessClass.InitializeDatabase();
             this.InitializeComponent();
             gg.Text = ApplicationData.Current.LocalFolder.Path;
         }
@@ -47,6 +47,7 @@ namespace MESH_v2
                         this.Frame.Navigate(typeof(AdminMenu));
                         break;
                     case 1:
+                        this.Frame.Navigate(typeof(TeacherMenu));
                         break;
                     case 2:
                         break;
@@ -54,6 +55,12 @@ namespace MESH_v2
                         break;
                 }
             }
+        }
+
+        private void goTecher_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(TeacherMenu));
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Documents;
 
 namespace MESH_v2
 {
@@ -13,6 +14,7 @@ namespace MESH_v2
         public string Password { get; set; }
         public string Role { get; set; }
         public string Group { get; set; }
+       
 
         public User(int id, string login, string password,string role, string group)
         {
@@ -21,6 +23,9 @@ namespace MESH_v2
             this.Password = password;
             this.Role = role;
             this.Group = group;
+            
+
+
         }
 
        

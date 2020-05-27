@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using SQLitePCL;
 using Microsoft.Toolkit.Uwp.UI.Animations.Behaviors;
 using MESH_v2;
+using Windows.UI.Xaml.Controls;
 
 namespace DataAccessLib
 {
@@ -16,24 +17,29 @@ namespace DataAccessLib
         static string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "MESH.sqlite");
         public static void InitializeDatabase()
         {
-            
-            
+
+
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
                 db.Open();
 
-                String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT)";
+                String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT);" +
+                    "CREATE TABLE IF NOT EXISTS Disciplines (id INTEGER PRIMIRI KEY, disciplineTitle TEXT NOT NULL, teacherId INT NOT NULL, inactive BOOLEAN NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS StudentsGroups (id INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL,hidden BOOLEAN NOT NULL, groupDisciplines TEXT NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS StudentsMarks (studentId INT NOT NULL, date BLOB NOT NULL,disciplineId INT NOT NULL, mark TEXT NOT NULL, description TEXT, FOREIGN KEY (studentId) REFERENCES Users(id))";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
             }
         }
-
+        //=============================================================
+        //users
+        //=============================================================
         public static int ValidateUser(string login, string password)
         {
-            
+
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
@@ -50,14 +56,15 @@ namespace DataAccessLib
                     if (reader.GetString(3) == "Teacher") return 1;
                     if (reader.GetString(3) == "Student") return 2;
                 }
-                
+
                 return -1;
             }
 
         }
+
         public static int AddUser(string login, string password, string role, string group)
         {
-            
+
             if (login != "" && password != "")
             {
                 using (SqliteConnection db =
@@ -65,7 +72,7 @@ namespace DataAccessLib
                 {
                     db.Open();
 
-                    String tableCommand = $"INSERT INTO users(login, password, userRole, userGroup) VALUES('{login}', '{password}', '{role}','{group}')";
+                    String tableCommand = $"INSERT INTO Users(login, password, userRole, userGroup) VALUES('{login}', '{password}', '{role}','{group}')";
 
                     try
                     {
@@ -86,8 +93,26 @@ namespace DataAccessLib
             }
         }
 
-        public static int ChangeUserData(User user)
+        public static int ChangeUserData(int id, string login, string password, string role, string group)
         {
+            using (SqliteConnection db =
+                              new SqliteConnection($"Data Source ={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"UPDATE users SET login = '{login}', password = '{password}', userRole = '{role}', userGroup = '{group}' WHERE id = {id}";
+
+                //try
+                //{
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                command.ExecuteReader();
+                //}
+                //catch (SqliteException)
+                //{
+                //    return -1;
+                //}
+            }
             return 0;
         }
 
@@ -135,7 +160,120 @@ namespace DataAccessLib
                 }
                 return users;
             }
-            
+
+        }
+
+        public static ObservableCollection<MESH_v2.User> GetUsersFromGroup(string group)
+        {
+            ObservableCollection<MESH_v2.User> users = new ObservableCollection<MESH_v2.User>();
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"SELECT * FROM Users WHERE GROUP = {group}";
+
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(new MESH_v2.User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+                }
+                return users;
+            }
+
+        }
+        //=============================================================
+
+
+        //=============================================================
+        //groups
+        //=============================================================
+        public static int AddGroup(string title, string disciplines)
+        {
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"INSERT INTO StudentsGroups (groupTitle, groupDisciplines, hidden) VALUES('{title}', '{disciplines}', 'false')";
+
+
+
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+            }
+            return 0;
+        }
+
+        public static ObservableCollection<string> GetGroupsTitles()
+        {
+            ObservableCollection<string> users = new ObservableCollection<string>();
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"SELECT * FROM StudentsGroups";
+
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(reader.GetString(1));
+                }
+                return users;
+            }
+
+        }
+
+        public static ObservableCollection<string> GetGroupsTitles(bool getHidden)
+        {
+            ObservableCollection<string> users = new ObservableCollection<string>();
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"SELECT * FROM StudentsGroups WHERE hidden = {getHidden}";
+
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(reader.GetString(1));
+                }
+                return users;
+            }
+
+        }
+        //=============================================================
+
+
+        //=============================================================
+        //marks
+        //=============================================================
+        public static int AddMark(int id, DateTimeOffset date ,string discipline, string mark)
+        {
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"INSERT INTO StudentsMarks (studentId, date, disciplineId, mark) VALUES('{id}', '{date}', '{discipline}', '{mark}')";
+
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+            }
+            return 0;
         }
     }
 }

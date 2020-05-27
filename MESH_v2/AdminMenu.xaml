@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
-
+    
         
     
         
@@ -19,9 +19,8 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="RowDetailsTemplate">
-                
-                    
-                    <Grid  Padding="5">
+             
+                        <Grid  Padding="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             
@@ -46,9 +45,38 @@
                 
             </PivotItem>
             <PivotItem Header="Groups">
-                
-
-            </PivotItem>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <AppBarButton Icon="Add" Label="NewGroup" x:Name="AddNewGroupBtn" Click="AddNewGroupBtn_Click">
+                                <FlyoutBase.AttachedFlyout>
+                                    <Flyout x:Name="AddNewGroupFlyout"  ShowMode="Standard" LightDismissOverlayMode="On">
+                                        <Grid>
+                                            <StackPanel>
+                                                <TextBox x:Name="AddGroupTitleBox" Header="Title" Width="200" Margin="8"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <AutoSuggestBox PlaceholderText="Select discipline" x:Name="DisciplineSelectionASBox" TextChanged="DisciplineSelectionASBox_TextChanged" SuggestionChosen="DisciplineSelectionASBox_SuggestionChosen" QueryIcon="Add" QuerySubmitted="DisciplineSelectionASBox_QuerySubmitted"/>
+                                                    <Button/>
+                                                </StackPanel>
+                                                <GridView>
+                                                    <GridView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding selectedDisciplines}"/>
+                                                        </DataTemplate>
+                                                    </GridView.ItemTemplate>
+                                                </GridView>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Flyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
+                            <AppBarButton Icon="Filter" Label="Filter"/>
+                        </StackPanel>
+                    </Grid>
+                </PivotItem>
             <PivotItem Header="Users">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -83,19 +111,22 @@
                         </StackPanel>
                     
 
-                    <controls:DataGrid  x:Name="UsersGrid" Grid.Row="1" ItemsSource="{x:Bind users}" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" RowDetailsTemplate="{StaticResource RowDetailsTemplate}">
-                        
-                        <controls:DataGrid.Columns>
+                    <controls:DataGrid  x:Name="UsersGrid" Grid.Row="1" ItemsSource="{x:Bind users}" AutoGenerateColumns="False" RowDetailsVisibilityMode="Collapsed" RowDetailsTemplate="{StaticResource RowDetailsTemplate}" CellEditEnded="UsersGrid_CellEditEnded" >
+
+                            
+                            <controls:DataGrid.Columns>
                                 <controls:DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
                                 <controls:DataGridTextColumn Header="Login" Binding="{Binding Login}" />
                                 <controls:DataGridTextColumn Header="Password" Binding="{Binding Password}"/>
-                                <controls:DataGridComboBoxColumn Header="Role" Binding="{Binding Role}" />
-                                <controls:DataGridComboBoxColumn Header="Group" Binding="{Binding Group}" />
+                                <controls:DataGridComboBoxColumn Header="Role" Binding="{Binding Role}" ItemsSource="{x:Bind roles}"/>
+                                
+                                <controls:DataGridComboBoxColumn Header="Group" Binding="{Binding Group}"/>
                         
                             </controls:DataGrid.Columns>
                     </controls:DataGrid>
                     
         </Grid>
+                
         </PivotItem>
         </Pivot>
     </Grid>

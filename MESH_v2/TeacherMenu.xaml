@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="MESH_v2.TeacherMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MESH_v2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Teacher WIP" FontWeight="Bold" Margin="10"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+
+            <ComboBox PlaceholderText="Discipline" x:Name="DisciplineSelectionBox" SelectionChanged="DisciplineSelectionBox_SelectionChanged">
+
+            </ComboBox>
+
+            <ComboBox PlaceholderText="Group" x:Name="GroupSelectionBox" SelectionChanged="GroupSelectionBox_SelectionChanged">
+                
+            </ComboBox>
+            <ComboBox PlaceholderText="Student" x:Name="StudentSelectionBox" SelectionChanged="StudentSelectionBox_SelectionChanged" ItemsSource="{x:Bind students}">
+
+            </ComboBox>
+            <CalendarDatePicker x:Name="MarkDatePicker"/>
+            <ComboBox PlaceholderText="Mark" x:Name="MarkSelectionBox" SelectionChanged="MarkSelectionBox_SelectionChanged">
+
+            </ComboBox>
+            <Button Content="Add mark" x:Name="AddMarkBtn" Click="AddMarkBtn_Click"/>
+        </StackPanel>
+        <controls:DataGrid>
+            
+        </controls:DataGrid>
+    </Grid>
+</Page>

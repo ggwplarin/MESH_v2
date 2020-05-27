@@ -9,7 +9,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
         <Button x:Name="goAdmin" Content="goAdmin"  Click="goAdmin_Click"/>
+        <Button x:Name="goTecher" Content="goTeacher"  Click="goTecher_Click"/>
+        </StackPanel>
         <TextBox x:Name="gg"  Width="400" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
