@@ -42,25 +42,20 @@
         </Grid.Resources>
         <Pivot Title="Administrator">
             <PivotItem Header="Disciplines">
-                
-            </PivotItem>
-            <PivotItem Header="Groups">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <StackPanel>
-                            <AppBarButton Icon="Add" Label="NewGroup" x:Name="AddNewGroupBtn" Click="AddNewGroupBtn_Click">
+                            <AppBarButton Icon="Add" Label="NewDiscipline" x:Name="AddNewDisciplineBtn" Click="AddNewDisciplineBtn_Click"  AllowFocusOnInteraction="True">
                                 <FlyoutBase.AttachedFlyout>
-                                    <Flyout x:Name="AddNewGroupFlyout"  ShowMode="Standard" LightDismissOverlayMode="On">
+                                    <Flyout x:Name="AddNewDisciplineFlyout"  ShowMode="Standard" LightDismissOverlayMode="On">
                                         <Grid>
-                                            <StackPanel>
-                                                <TextBox x:Name="AddGroupTitleBox" Header="Title" Width="200" Margin="8"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <AutoSuggestBox PlaceholderText="Select discipline" x:Name="DisciplineSelectionASBox" TextChanged="DisciplineSelectionASBox_TextChanged" SuggestionChosen="DisciplineSelectionASBox_SuggestionChosen" QueryIcon="Add" QuerySubmitted="DisciplineSelectionASBox_QuerySubmitted"/>
-                                                    <Button/>
-                                                </StackPanel>
+                                            <StackPanel Orientation="Vertical">
+                                                
+
+
                                                 <GridView>
                                                     <GridView.ItemTemplate>
                                                         <DataTemplate>
@@ -68,6 +63,61 @@
                                                         </DataTemplate>
                                                     </GridView.ItemTemplate>
                                                 </GridView>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Flyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
+                            <AppBarButton Icon="Filter" Label="Filter"/>
+                        </StackPanel>
+                    </Grid>
+                </PivotItem>
+            <PivotItem Header="Groups">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <AppBarButton Icon="Add" Label="NewGroup" x:Name="AddNewGroupBtn" Click="AddNewGroupBtn_Click"  AllowFocusOnInteraction="True">
+                                <FlyoutBase.AttachedFlyout>
+                                    <Flyout x:Name="AddNewGroupFlyout"  ShowMode="Standard" LightDismissOverlayMode="On">
+                                        <Grid>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBox x:Name="AddGroupTitleBox" Header="Title" Width="200" Margin="8"/>
+
+                                                <AutoSuggestBox  x:Name="DisciplineSelectionASBox"
+                                                    TextMemberPath="Title"
+                                                    PlaceholderText="Add discipline"
+                                                    DisplayMemberPath="Title"             
+                                                    TextChanged="DisciplineSelectionASBox_TextChanged"
+                                                    SuggestionChosen="DisciplineSelectionASBox_SuggestionChosen"
+                                                    QueryIcon="Add" 
+                                                    QuerySubmitted="DisciplineSelectionASBox_QuerySubmitted"
+                                                    Width="200"
+                                                    Margin="8"
+                                                />
+
+
+
+
+                                                <GridView x:Name="SelectedDisciplinesGridView" Width="200" Margin="8" Header="Selected disciplines" ItemsSource="{x:Bind selectedDisciplines}" DoubleTapped="SelectedDisciplinesGridView_DoubleTapped" >
+                                                    <GridView.ItemTemplate>
+                                                        
+                                                        <DataTemplate>
+                                                            
+                                                            <TextBlock Text="{Binding Title}"/>
+                                                        </DataTemplate>
+                                                    </GridView.ItemTemplate>
+                                                    <GridView.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <controls:WrapPanel/>
+                                                        </ItemsPanelTemplate>
+                                                    </GridView.ItemsPanel>
+                                                    
+                                                </GridView>
+
+                                                <Button x:Name="GroupAddConfirmBtn" Content="Confirm" Margin="8" Width="200" Click="GroupAddConfirmBtn_Click"/>
                                             </StackPanel>
                                         </Grid>
                                     </Flyout>

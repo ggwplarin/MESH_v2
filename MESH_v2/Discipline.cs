@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MESH_v2
 {
-    class Discipline
+    public class Discipline
     {
         public int Id { get; set; }
         public string Title { get; set; }

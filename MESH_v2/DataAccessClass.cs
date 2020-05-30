@@ -9,6 +9,7 @@ using SQLitePCL;
 using Microsoft.Toolkit.Uwp.UI.Animations.Behaviors;
 using MESH_v2;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
 
 namespace DataAccessLib
 {
@@ -24,9 +25,9 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT);" +
-                    "CREATE TABLE IF NOT EXISTS Disciplines (id INTEGER PRIMIRI KEY, disciplineTitle TEXT NOT NULL, teacherId INT NOT NULL, inactive BOOLEAN NOT NULL);" +
-                    "CREATE TABLE IF NOT EXISTS StudentsGroups (id INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL,hidden BOOLEAN NOT NULL, groupDisciplines TEXT NOT NULL);" +
+                String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id_users INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT);" +
+                    "CREATE TABLE IF NOT EXISTS Disciplines (id_disciplines INTEGER PRIMARY KEY, disciplineTitle TEXT UNIQUE NOT NULL, teacherId INT NOT NULL, inactive BOOLEAN NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS StudentsGroups (id_stgroups INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL,hidden BOOLEAN NOT NULL, groupDisciplines TEXT NOT NULL);" +
                     "CREATE TABLE IF NOT EXISTS StudentsMarks (studentId INT NOT NULL, date BLOB NOT NULL,disciplineId INT NOT NULL, mark TEXT NOT NULL, description TEXT, FOREIGN KEY (studentId) REFERENCES Users(id))";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
@@ -100,7 +101,7 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = $"UPDATE users SET login = '{login}', password = '{password}', userRole = '{role}', userGroup = '{group}' WHERE id = {id}";
+                String tableCommand = $"UPDATE users SET login = '{login}', password = '{password}', userRole = '{role}', userGroup = '{group}' WHERE id_users = {id}";
 
                 //try
                 //{
@@ -171,7 +172,7 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = $"SELECT * FROM Users WHERE GROUP = {group}";
+                String tableCommand = $"SELECT * FROM Users WHERE GROUP = '{group}'";
 
                 SqliteCommand command = new SqliteCommand(tableCommand, db);
 
@@ -255,6 +256,82 @@ namespace DataAccessLib
 
         }
         //=============================================================
+
+
+
+
+        //=============================================================
+        //disciplines
+        //=============================================================
+        public static int AddDiscipline(string title, int teacherId, bool inactive)
+        {
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"INSERT INTO Disciplines (disciplineTitle, teacherId, inactive) VALUES('{title}', '{teacherId}', 'false')";
+
+
+                try
+                {
+                    SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
+                    createTable.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+
+
+        public static ObservableCollection<Discipline> GetDisciplines()
+        {
+            ObservableCollection<Discipline> disciplines = new ObservableCollection<Discipline>();
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"SELECT * FROM Disciplines";
+
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                SqliteDataReader reader = command.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    disciplines.Add(new Discipline(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetBoolean(3)));
+                }
+                return disciplines;
+            }
+        }
+        public static ObservableCollection<Discipline> GetDisciplines(bool getInactive)
+        {
+            ObservableCollection<Discipline> users = new ObservableCollection<Discipline>();
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"SELECT * FROM Disciplines WHERE inactive = {getInactive}";
+
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(new Discipline(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetBoolean(3)));
+                }
+                return users;
+            }
+        }
+        //=============================================================
+
 
 
         //=============================================================
