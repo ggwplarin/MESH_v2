@@ -128,6 +128,8 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudentGroup.cs" />
+    <Compile Include="StudentMark.cs" />
     <Compile Include="TeacherMenu.xaml.cs">
       <DependentUpon>TeacherMenu.xaml</DependentUpon>
     </Compile>

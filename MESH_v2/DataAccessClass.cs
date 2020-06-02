@@ -1,33 +1,28 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using MESH_v2;
 using Microsoft.Data.Sqlite;
-using Windows.Storage;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Reflection.Metadata.Ecma335;
-using SQLitePCL;
-using Microsoft.Toolkit.Uwp.UI.Animations.Behaviors;
-using MESH_v2;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Documents;
+using System.Runtime.CompilerServices;
+using Windows.Storage;
 
 namespace DataAccessLib
 {
     public static class DataAccessClass
     {
-        static string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "MESH.sqlite");
+        private static string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "MESH.sqlite");
+
         public static void InitializeDatabase()
         {
-
-
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
                 db.Open();
 
                 String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id_users INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT);" +
-                    "CREATE TABLE IF NOT EXISTS Disciplines (id_disciplines INTEGER PRIMARY KEY, disciplineTitle TEXT UNIQUE NOT NULL, teacherId INT NOT NULL, inactive BOOLEAN NOT NULL);" +
-                    "CREATE TABLE IF NOT EXISTS StudentsGroups (id_stgroups INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL,hidden BOOLEAN NOT NULL, groupDisciplines TEXT NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS Disciplines (id_disciplines INTEGER PRIMARY KEY, disciplineTitle TEXT UNIQUE NOT NULL, teacherId INT NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS StudentsGroups (id_stgroups INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL, groupDisciplines TEXT NOT NULL);" +
                     "CREATE TABLE IF NOT EXISTS StudentsMarks (studentId INT NOT NULL, date BLOB NOT NULL,disciplineId INT NOT NULL, mark TEXT NOT NULL, description TEXT, FOREIGN KEY (studentId) REFERENCES Users(id))";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
@@ -35,12 +30,16 @@ namespace DataAccessLib
                 createTable.ExecuteReader();
             }
         }
-        //=============================================================
-        //users
-        //=============================================================
-        public static int ValidateUser(string login, string password)
+
+        public static void REInitializeDatabase()
         {
 
+            if (File.Exists(dbpath)) File.Delete(dbpath);
+            InitializeDatabase();
+        }
+
+        public static int ValidateUser(string login, string password)
+        {
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
@@ -60,12 +59,10 @@ namespace DataAccessLib
 
                 return -1;
             }
-
         }
 
         public static int AddUser(string login, string password, string role, string group)
         {
-
             if (login != "" && password != "")
             {
                 using (SqliteConnection db =
@@ -119,13 +116,12 @@ namespace DataAccessLib
 
         public static int DeleteUser(int id)
         {
-
             using (SqliteConnection db =
                                new SqliteConnection($"Data Source ={dbpath}"))
             {
                 db.Open();
 
-                String tableCommand = $"DELETE FROM users WHERE id = {id}";
+                String tableCommand = $"DELETE FROM users WHERE id_users = {id}";
 
                 try
                 {
@@ -161,7 +157,6 @@ namespace DataAccessLib
                 }
                 return users;
             }
-
         }
 
         public static ObservableCollection<MESH_v2.User> GetUsersFromGroup(string group)
@@ -172,7 +167,7 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = $"SELECT * FROM Users WHERE GROUP = '{group}'";
+                String tableCommand = $"SELECT * FROM Users WHERE userGroup = '{group}'";
 
                 SqliteCommand command = new SqliteCommand(tableCommand, db);
 
@@ -184,14 +179,8 @@ namespace DataAccessLib
                 }
                 return users;
             }
-
         }
-        //=============================================================
 
-
-        //=============================================================
-        //groups
-        //=============================================================
         public static int AddGroup(string title, string disciplines)
         {
             using (SqliteConnection db =
@@ -199,20 +188,18 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = $"INSERT INTO StudentsGroups (groupTitle, groupDisciplines, hidden) VALUES('{title}', '{disciplines}', 'false')";
+                String tableCommand = $"INSERT INTO StudentsGroups (groupTitle, groupDisciplines) VALUES('{title}', '{disciplines}')";
 
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
 
-
-                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-
-                createTable.ExecuteReader();
+                command.ExecuteReader();
             }
             return 0;
         }
 
-        public static ObservableCollection<string> GetGroupsTitles()
+        public static ObservableCollection<StudentGroup> GetGroups()
         {
-            ObservableCollection<string> users = new ObservableCollection<string>();
+            ObservableCollection<StudentGroup> users = new ObservableCollection<StudentGroup>();
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
@@ -226,52 +213,20 @@ namespace DataAccessLib
 
                 while (reader.Read())
                 {
-                    users.Add(reader.GetString(1));
+                    users.Add(new StudentGroup(reader.GetInt32(0), reader.GetString(1), reader.GetString(2)));
                 }
                 return users;
             }
-
         }
 
-        public static ObservableCollection<string> GetGroupsTitles(bool getHidden)
-        {
-            ObservableCollection<string> users = new ObservableCollection<string>();
-            using (SqliteConnection db =
-               new SqliteConnection($"Filename={dbpath}"))
-            {
-                db.Open();
-
-                String tableCommand = $"SELECT * FROM StudentsGroups WHERE hidden = {getHidden}";
-
-                SqliteCommand command = new SqliteCommand(tableCommand, db);
-
-                SqliteDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    users.Add(reader.GetString(1));
-                }
-                return users;
-            }
-
-        }
-        //=============================================================
-
-
-
-
-        //=============================================================
-        //disciplines
-        //=============================================================
-        public static int AddDiscipline(string title, int teacherId, bool inactive)
+        public static int AddDiscipline(string title, int teacherId)
         {
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
                 db.Open();
 
-                String tableCommand = $"INSERT INTO Disciplines (disciplineTitle, teacherId, inactive) VALUES('{title}', '{teacherId}', 'false')";
-
+                String tableCommand = $"INSERT INTO Disciplines (disciplineTitle, teacherId, inactive) VALUES('{title}', '{teacherId}')";
 
                 try
                 {
@@ -287,7 +242,6 @@ namespace DataAccessLib
             return 0;
         }
 
-
         public static ObservableCollection<Discipline> GetDisciplines()
         {
             ObservableCollection<Discipline> disciplines = new ObservableCollection<Discipline>();
@@ -301,7 +255,7 @@ namespace DataAccessLib
                 SqliteCommand command = new SqliteCommand(tableCommand, db);
 
                 SqliteDataReader reader = command.ExecuteReader();
-                
+
                 while (reader.Read())
                 {
                     disciplines.Add(new Discipline(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetBoolean(3)));
@@ -309,35 +263,8 @@ namespace DataAccessLib
                 return disciplines;
             }
         }
-        public static ObservableCollection<Discipline> GetDisciplines(bool getInactive)
-        {
-            ObservableCollection<Discipline> users = new ObservableCollection<Discipline>();
-            using (SqliteConnection db =
-               new SqliteConnection($"Filename={dbpath}"))
-            {
-                db.Open();
 
-                String tableCommand = $"SELECT * FROM Disciplines WHERE inactive = {getInactive}";
-
-                SqliteCommand command = new SqliteCommand(tableCommand, db);
-
-                SqliteDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    users.Add(new Discipline(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetBoolean(3)));
-                }
-                return users;
-            }
-        }
-        //=============================================================
-
-
-
-        //=============================================================
-        //marks
-        //=============================================================
-        public static int AddMark(int id, DateTimeOffset date ,string discipline, string mark)
+        public static int AddMark(int id, DateTimeOffset date, string discipline, string mark)
         {
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
@@ -351,6 +278,28 @@ namespace DataAccessLib
                 createTable.ExecuteReader();
             }
             return 0;
+        }
+
+        public static ObservableCollection<StudentMark> GetStudentsMarks()
+        {
+            ObservableCollection<StudentMark> users = new ObservableCollection<StudentMark>();
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                String tableCommand = $"SELECT * FROM StudentsMarks";
+
+                SqliteCommand command = new SqliteCommand(tableCommand, db);
+
+                SqliteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(new StudentMark(reader.GetInt32(0),reader.GetDateTimeOffset(1), reader.GetInt32(2), reader.GetString(3), reader.GetString(4)));
+                }
+                return users;
+            }
         }
     }
 }

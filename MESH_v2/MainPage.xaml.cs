@@ -62,5 +62,10 @@ namespace MESH_v2
             this.Frame.Navigate(typeof(TeacherMenu));
             
         }
+
+        private void REInitializeDB_Click(object sender, RoutedEventArgs e)
+        {
+            DataAccessClass.REInitializeDatabase();
+        }
     }
 }
