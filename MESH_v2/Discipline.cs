@@ -11,15 +11,15 @@ namespace MESH_v2
         public int Id { get; set; }
         public string Title { get; set; }
         public int TeacherId { get; set; }
-        public bool Inactive { get; set; }
+        
 
 
-        public Discipline(int id, string title, int teacherId, bool inactive)
+        public Discipline(int id, string title, int teacherId)
         {
             this.Id = id;
             this.Title = title;
             this.TeacherId = teacherId;
-            this.Inactive = inactive;
+            
 
 
 

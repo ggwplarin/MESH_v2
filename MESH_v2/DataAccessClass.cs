@@ -23,18 +23,32 @@ namespace DataAccessLib
                 String tableCommand = "CREATE TABLE IF NOT EXISTS Users (id_users INTEGER PRIMARY KEY, login VARCHAR UNIQUE NOT NULL, password VARCHAR NOT NULL, userRole TEXT, userGroup TEXT);" +
                     "CREATE TABLE IF NOT EXISTS Disciplines (id_disciplines INTEGER PRIMARY KEY, disciplineTitle TEXT UNIQUE NOT NULL, teacherId INT NOT NULL);" +
                     "CREATE TABLE IF NOT EXISTS StudentsGroups (id_stgroups INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL, groupDisciplines TEXT NOT NULL);" +
-                    "CREATE TABLE IF NOT EXISTS StudentsMarks (studentId INT NOT NULL, date BLOB NOT NULL,disciplineId INT NOT NULL, mark TEXT NOT NULL, description TEXT, FOREIGN KEY (studentId) REFERENCES Users(id))";
+                    "CREATE TABLE IF NOT EXISTS StudentsMarks (studentId INT NOT NULL, date BLOB NOT NULL,disciplineId INT NOT NULL, mark TEXT NOT NULL, description TEXT, FOREIGN KEY (studentId) REFERENCES Users(id_users) ON DELETE CASCADE);" +
+                    "PRAGMA foreign_keys = ON;";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
+                db.Close();
             }
         }
 
         public static void REInitializeDatabase()
         {
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
 
-            if (File.Exists(dbpath)) File.Delete(dbpath);
+                String tableCommand = "DROP TABLE Users; DROP TABLE Disciplines; DROP TABLE StudentsGroups; DROP TABLE StudentsMarks";
+
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+                db.Close();
+            }
+
+
             InitializeDatabase();
         }
 
@@ -57,6 +71,7 @@ namespace DataAccessLib
                     if (reader.GetString(3) == "Student") return 2;
                 }
 
+                db.Close();
                 return -1;
             }
         }
@@ -77,12 +92,15 @@ namespace DataAccessLib
                         SqliteCommand command = new SqliteCommand(tableCommand, db);
 
                         command.ExecuteReader();
+                        db.Close();
                     }
                     catch (SqliteException)
                     {
+                        db.Close();
                         return 1;
                     }
                 }
+                
                 return 0;
             }
             else
@@ -110,6 +128,7 @@ namespace DataAccessLib
                 //{
                 //    return -1;
                 //}
+                db.Close();
             }
             return 0;
         }
@@ -123,16 +142,17 @@ namespace DataAccessLib
 
                 String tableCommand = $"DELETE FROM users WHERE id_users = {id}";
 
-                try
-                {
+                //try
+                //{
                     SqliteCommand command = new SqliteCommand(tableCommand, db);
 
                     command.ExecuteReader();
-                }
-                catch (SqliteException)
-                {
-                    return 1;
-                }
+                //}
+                //catch (SqliteException)
+                //{
+                //    return 1;
+                //}
+                db.Close();
             }
             return 0;
         }
@@ -155,6 +175,7 @@ namespace DataAccessLib
                 {
                     users.Add(new MESH_v2.User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
                 }
+                db.Close();
                 return users;
             }
         }
@@ -177,6 +198,7 @@ namespace DataAccessLib
                 {
                     users.Add(new MESH_v2.User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
                 }
+                db.Close();
                 return users;
             }
         }
@@ -193,6 +215,7 @@ namespace DataAccessLib
                 SqliteCommand command = new SqliteCommand(tableCommand, db);
 
                 command.ExecuteReader();
+                db.Close();
             }
             return 0;
         }
@@ -215,6 +238,7 @@ namespace DataAccessLib
                 {
                     users.Add(new StudentGroup(reader.GetInt32(0), reader.GetString(1), reader.GetString(2)));
                 }
+                db.Close();
                 return users;
             }
         }
@@ -226,16 +250,18 @@ namespace DataAccessLib
             {
                 db.Open();
 
-                String tableCommand = $"INSERT INTO Disciplines (disciplineTitle, teacherId, inactive) VALUES('{title}', '{teacherId}')";
+                String tableCommand = $"INSERT INTO Disciplines (disciplineTitle, teacherId) VALUES('{title}', '{teacherId}')";
 
                 try
                 {
                     SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                     createTable.ExecuteReader();
+                    db.Close();
                 }
                 catch (SqliteException)
                 {
+                    db.Close();
                     return 1;
                 }
             }
@@ -258,8 +284,9 @@ namespace DataAccessLib
 
                 while (reader.Read())
                 {
-                    disciplines.Add(new Discipline(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetBoolean(3)));
+                    disciplines.Add(new Discipline(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
                 }
+                db.Close();
                 return disciplines;
             }
         }
@@ -276,6 +303,7 @@ namespace DataAccessLib
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
+                db.Close();
             }
             return 0;
         }
@@ -298,6 +326,7 @@ namespace DataAccessLib
                 {
                     users.Add(new StudentMark(reader.GetInt32(0),reader.GetDateTimeOffset(1), reader.GetInt32(2), reader.GetString(3), reader.GetString(4)));
                 }
+                db.Close();
                 return users;
             }
         }

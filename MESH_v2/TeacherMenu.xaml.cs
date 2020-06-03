@@ -39,7 +39,7 @@ namespace MESH_v2
             students.Select(s=>s.Id).Contains(m.stId)));
             List<DateTimeOffset> dates = filtredMarks.Select(m=>m.Date).Distinct().OrderBy(d=>d).ToList();
 
-            studentMarks.Add(new ObservableCollection<string>());
+            studentMarks.Add(new ObservableCollection<string>((new List<string>() {"STUDENTS"}).Concat(students.Select(s=>s.Login).ToList())));
 
             //studentMarks
 

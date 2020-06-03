@@ -30,15 +30,18 @@ namespace MESH_v2
 
         private void DeleteSelectedUser_Click(object sender, RoutedEventArgs e)
         {
-            if (UsersGrid.SelectedIndex != -1)
+            if (UsersGrid.SelectedItem != null)
             {
-                DataAccessClass.DeleteUser(users[UsersGrid.SelectedIndex].Id);
+                DataAccessClass.DeleteUser((UsersGrid.SelectedItem as User).Id);
+
                 users = DataAccessClass.GetUsers();
+                UsersGrid.ItemsSource = users;
             }
         }
 
         private void AddNewUserBtn_Click(object sender, RoutedEventArgs e)
         {
+            studentGroups = DataAccessClass.GetGroups();
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
@@ -48,7 +51,7 @@ namespace MESH_v2
             string group = "";
             if ($"{AddNewUserRoleCBox.SelectedItem as string}" == "Student")
             {
-                group = $"{AddNewUserGroupCBox.SelectedItem as string}";
+                group = $"{(AddNewUserGroupCBox.SelectedItem as StudentGroup).Title}";
             }
             role = $"{AddNewUserRoleCBox.SelectedItem as string}";
             if (AddNewUserRoleCBox.SelectedIndex != -1 && AddUserLoginBox.Text != "" && AddUSerPasswordBox.Password != "")
@@ -92,6 +95,7 @@ namespace MESH_v2
 
         private void AddNewGroupBtn_Click(object sender, RoutedEventArgs e)
         {
+            studentGroups = DataAccessClass.GetGroups();
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
@@ -164,7 +168,6 @@ namespace MESH_v2
 
         private void DisciplineAddConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-
             DataAccessClass.AddDiscipline(DisciplineTitleTBox.Text, (TeacherIdCBox.SelectedItem as User).Id);
         }
     }

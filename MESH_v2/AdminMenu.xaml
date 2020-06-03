@@ -230,7 +230,10 @@
                                                     Width="200"
                                                     Margin="8"
                                                     Header="Group"
-                                                    IsEnabled="False" />
+                                                    IsEnabled="False" 
+                                                    ItemsSource="{x:Bind studentGroups}" 
+                                                    SelectedValuePath="Title"
+                                                    DisplayMemberPath="Title"/>
                                                 <Button
                                                     x:Name="AddUserConfirmBtn"
                                                     Width="200"

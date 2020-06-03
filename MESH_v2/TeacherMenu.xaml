@@ -47,8 +47,8 @@
                 Click="AddMarkBtn_Click"
                 Content="Add mark" />
         </StackPanel>
-        <!--<controls:DataGrid x:Name="StudentsMarksGrid" AutoGenerateColumns="True" ItemsSource="">
+        <controls:DataGrid x:Name="StudentsMarksGrid" AutoGenerateColumns="True" ItemsSource="{x:Bind studentMarks}">
 
-        </controls:DataGrid>-->
+        </controls:DataGrid>
     </Grid>
 </Page>
