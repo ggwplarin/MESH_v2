@@ -42,6 +42,7 @@ namespace MESH_v2
         private void AddNewUserBtn_Click(object sender, RoutedEventArgs e)
         {
             studentGroups = DataAccessClass.GetGroups();
+            AddNewUserGroupCBox.ItemsSource = studentGroups;
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
@@ -96,6 +97,7 @@ namespace MESH_v2
         private void AddNewGroupBtn_Click(object sender, RoutedEventArgs e)
         {
             studentGroups = DataAccessClass.GetGroups();
+            disciplines = DataAccessClass.GetDisciplines();
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
