@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using Windows.Storage;
+using System.Globalization;
 
 namespace DataAccessLib
 {
@@ -52,7 +53,7 @@ namespace DataAccessLib
             InitializeDatabase();
         }
 
-        public static int ValidateUser(string login, string password)
+        public static User ValidateUser(string login, string password)
         {
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
@@ -66,13 +67,11 @@ namespace DataAccessLib
                 SqliteDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    if (reader.GetString(3) == "Admin") return 0;
-                    if (reader.GetString(3) == "Teacher") return 1;
-                    if (reader.GetString(3) == "Student") return 2;
+                    return new MESH_v2.User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
                 }
 
                 db.Close();
-                return -1;
+                return null;
             }
         }
 
@@ -291,14 +290,14 @@ namespace DataAccessLib
             }
         }
 
-        public static int AddMark(int id, DateTimeOffset date, string discipline, string mark)
+        public static int AddMark(int id, DateTimeOffset date, int disciplineId, string mark, string description)
         {
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
             {
                 db.Open();
 
-                String tableCommand = $"INSERT INTO StudentsMarks (studentId, date, disciplineId, mark) VALUES('{id}', '{date}', '{discipline}', '{mark}')";
+                String tableCommand = $"INSERT INTO StudentsMarks (studentId, date, disciplineId, mark, description) VALUES({id}, '{date}', {disciplineId}, '{mark}','{description??""}')";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
@@ -322,9 +321,9 @@ namespace DataAccessLib
 
                 SqliteDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
+                while (reader.Read()) 
                 {
-                    users.Add(new StudentMark(reader.GetInt32(0),reader.GetDateTimeOffset(1), reader.GetInt32(2), reader.GetString(3), reader.GetString(4)));
+                    users.Add(new StudentMark(reader.GetInt32(0),DateTimeOffset.Parse( reader.GetString(1)), reader.GetInt32(2), reader.GetString(3), reader.GetString(4)));
                 }
                 db.Close();
                 return users;

@@ -11,17 +11,18 @@ namespace MESH_v2
         public int stId { get; set; }
         public DateTimeOffset Date { get; set; }
         public int DisciplineId { get; set; }
+        public string Mark { get; set; }
         public string Description { get; set; }
 
 
 
-        public StudentMark(int studentId, DateTimeOffset date, int disciplineId, string disciplinesIds,string description)
+        public StudentMark(int studentId, DateTimeOffset date, int disciplineId, string mark,string description)
         {
             this.stId = studentId;
             this.Date = date;
             this.DisciplineId = disciplineId;
+            this.Mark = mark;
             this.Description = description;
-
 
 
 

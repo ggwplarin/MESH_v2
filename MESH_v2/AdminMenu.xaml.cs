@@ -148,7 +148,7 @@ namespace MESH_v2
 
         private void AddNewDisciplineBtn_Click(object sender, RoutedEventArgs e)
         {
-            teachers = new ObservableCollection<User>(DataAccessClass.GetUsers().Where(u => u.Role == "Teacher").OrderBy(t=>t.Id));
+            teachers = new ObservableCollection<User>(DataAccessClass.GetUsers().Where(u => u.Role == "Teacher").OrderBy(t => t.Id));
             TeacherIdCBox.ItemsSource = teachers;
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }

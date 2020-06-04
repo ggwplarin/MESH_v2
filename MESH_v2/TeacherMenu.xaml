@@ -20,11 +20,6 @@
             FontWeight="Bold"
             Text="Teacher WIP" />
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-
-            <ComboBox
-                x:Name="DisciplineSelectionBox"
-                PlaceholderText="Discipline"
-                SelectionChanged="DisciplineSelectionBox_SelectionChanged" />
             <ComboBox
                 x:Name="GroupSelectionBox"
                 DisplayMemberPath="Title"
@@ -33,22 +28,34 @@
                 SelectedValuePath="Title"
                 SelectionChanged="GroupSelectionBox_SelectionChanged" />
             <ComboBox
+                x:Name="DisciplineSelectionBox"
+                DisplayMemberPath="Title"
+                PlaceholderText="Discipline"
+                SelectedValuePath="Title"
+                SelectionChanged="DisciplineSelectionBox_SelectionChanged" />
+
+            <ComboBox
                 x:Name="StudentSelectionBox"
+                DisplayMemberPath="Login"
                 ItemsSource="{x:Bind students}"
                 PlaceholderText="Student"
+                SelectedValuePath="Login"
                 SelectionChanged="StudentSelectionBox_SelectionChanged" />
             <CalendarDatePicker x:Name="MarkDatePicker" />
             <ComboBox
                 x:Name="MarkSelectionBox"
+                ItemsSource="{x:Bind markTypes}"
                 PlaceholderText="Mark"
                 SelectionChanged="MarkSelectionBox_SelectionChanged" />
+            <TextBox x:Name="DescriptionBox" PlaceholderText="Description"/>
             <Button
                 x:Name="AddMarkBtn"
                 Click="AddMarkBtn_Click"
                 Content="Add mark" />
         </StackPanel>
-        <controls:DataGrid x:Name="StudentsMarksGrid" AutoGenerateColumns="True" ItemsSource="{x:Bind studentMarks}">
-
-        </controls:DataGrid>
+        <controls:DataGrid Grid.Row="2"
+            x:Name="StudentsMarksGrid"
+            AutoGenerateColumns="True"
+            ItemsSource="{x:Bind studentMarks}" />
     </Grid>
 </Page>

@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using DataAccessLib;
+using System;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using DataAccessLib;
-using Windows.Storage;
+
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
 namespace MESH_v2
@@ -25,7 +15,6 @@ namespace MESH_v2
     {
         public MainPage()
         {
-
             DataAccessClass.InitializeDatabase();
             this.InitializeComponent();
             gg.Text = ApplicationData.Current.LocalFolder.Path;
@@ -33,7 +22,6 @@ namespace MESH_v2
 
         private void goAdmin_Click(object sender, RoutedEventArgs e)
         {
-
             this.Frame.Navigate(typeof(AdminMenu));
         }
 
@@ -41,18 +29,27 @@ namespace MESH_v2
         {
             if (LoginMenuLoginBox.Text != "" && LoginMenuPasswordBox.Password != "")
             {
-                switch( DataAccessClass.ValidateUser(LoginMenuLoginBox.Text, LoginMenuPasswordBox.Password))
+                User temp = DataAccessClass.ValidateUser(LoginMenuLoginBox.Text, LoginMenuPasswordBox.Password);
+                if (temp != null)//я хочу спать и пока хз на что в 7# это заменить
                 {
-                    case 0:
-                        this.Frame.Navigate(typeof(AdminMenu));
-                        break;
-                    case 1:
-                        this.Frame.Navigate(typeof(TeacherMenu));
-                        break;
-                    case 2:
-                        break;
-                    default:
-                        break;
+                    switch (temp.Role)
+                    {
+                        case "Admin":
+                            this.Frame.Navigate(typeof(AdminMenu), temp);
+                            break;
+
+                        case "Teacher":
+                            this.Frame.Navigate(typeof(TeacherMenu), temp);
+                            break;
+
+                        case "Student":
+                            this.Frame.Navigate(typeof(StudentMenu), temp);
+                            break;
+                    }
+                }
+                else
+                {
+                    DisplayBadCredentialsDialog();
                 }
             }
         }
@@ -60,12 +57,23 @@ namespace MESH_v2
         private void goTecher_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(TeacherMenu));
-            
         }
 
         private void REInitializeDB_Click(object sender, RoutedEventArgs e)
         {
             DataAccessClass.REInitializeDatabase();
+        }
+
+        private async void DisplayBadCredentialsDialog()
+        {
+            ContentDialog noWifiDialog = new ContentDialog()
+            {
+                Title = "Ошибка!",
+                Content = "Проверьте правильность введенных данных.",
+                CloseButtonText = "Продолжить"
+            };
+
+            await noWifiDialog.ShowAsync();
         }
     }
 }
