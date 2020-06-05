@@ -207,7 +207,7 @@
                                 </AppBarButton>
                             </CommandBar.SecondaryCommands>
                         </CommandBar>
-                        <ListView Grid.Row="1" ItemsSource="{x:Bind studentGroups}">
+                        <ListView Grid.Row="1" ItemsSource="{x:Bind studentGroups}" x:Name="GroupsList">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>

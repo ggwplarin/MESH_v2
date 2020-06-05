@@ -165,6 +165,8 @@ namespace MESH_v2
                 DataAccessClass.AddGroup(AddGroupTitleBox.Text, String.Join("|", selectedDisciplines.Select(d => $"{d.Id}")));
                 selectedDisciplines.Clear();
                 AddGroupTitleBox.Text = "";
+                GroupsList.ItemsSource = DataAccessClass.GetGroups();
+
             }
         }
 
