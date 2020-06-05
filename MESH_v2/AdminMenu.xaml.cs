@@ -170,7 +170,14 @@ namespace MESH_v2
 
         private void DisciplineAddConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-            DataAccessClass.AddDiscipline(DisciplineTitleTBox.Text, (TeacherIdCBox.SelectedItem as User).Id);
+            if ((!String.IsNullOrEmpty(DisciplineTitleTBox.Text)) && (TeacherIdCBox.SelectedItem as User != null))
+            {
+                DataAccessClass.AddDiscipline(DisciplineTitleTBox.Text, (TeacherIdCBox.SelectedItem as User).Id);
+                DisciplineTitleTBox.Text = "";
+                TeacherIdCBox.SelectedIndex = -1;
+                DisciplinesList.ItemsSource = DataAccessClass.GetDisciplines();
+            }
+            
         }
     }
 }
