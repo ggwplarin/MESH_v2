@@ -47,14 +47,20 @@
                 ItemsSource="{x:Bind markTypes}"
                 PlaceholderText="Mark"
                 SelectionChanged="MarkSelectionBox_SelectionChanged" />
-            <TextBox x:Name="DescriptionBox" PlaceholderText="Description"/>
+            <TextBox x:Name="DescriptionBox" PlaceholderText="Description" />
             <Button
                 x:Name="AddMarkBtn"
                 Click="AddMarkBtn_Click"
                 Content="Add mark" />
         </StackPanel>
-        <controls:DataGrid Grid.Row="2"
+        <Button
+            x:Name="ExportToExcelBtn"
+            HorizontalAlignment="Right"
+            Click="ExportToExcelBtn_Click"
+            Content="Export to Excel" />
+        <controls:DataGrid
             x:Name="StudentsMarksGrid"
+            Grid.Row="2"
             AutoGenerateColumns="True"
             ItemsSource="{x:Bind studentMarks}" />
     </Grid>

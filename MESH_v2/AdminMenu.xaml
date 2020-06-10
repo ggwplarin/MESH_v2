@@ -78,7 +78,7 @@
                                     </Flyout>
                                 </FlyoutBase.AttachedFlyout>
                             </AppBarButton>
-                            <AppBarButton Icon="Filter" Label="Filter" />
+                            <!--<AppBarButton Icon="Filter" Label="Filter" />-->
                         </CommandBar>
                         <ListView x:Name="DisciplinesList" Grid.Row="1" ItemsSource="{x:Bind disciplines}">
                             <ListView.ItemTemplate>
@@ -187,20 +187,20 @@
                                     </Flyout>
                                 </FlyoutBase.AttachedFlyout>
                             </AppBarButton>
-                            <AppBarButton Icon="Filter" Label="Filter">
+                            <!--<AppBarButton Icon="Filter" Label="Filter">
                                 <AppBarButton.KeyboardAccelerators>
                                     <KeyboardAccelerator Key="F" Modifiers="Control" />
                                 </AppBarButton.KeyboardAccelerators>
-                            </AppBarButton>
+                            </AppBarButton>-->
                             <CommandBar.SecondaryCommands>
-                                <AppBarButton x:Name="EditGroupBtn" Icon="Edit">
+                                <!--<AppBarButton x:Name="EditGroupBtn" Icon="Edit">
                                     <AppBarButton.KeyboardAccelerators>
                                         <KeyboardAccelerator Key="E" Modifiers="Control" />
                                     </AppBarButton.KeyboardAccelerators>
                                 </AppBarButton>
 
-                                <AppBarSeparator />
-                                <AppBarButton x:Name="DeleteGroupBtn" Icon="Delete">
+                                <AppBarSeparator />-->
+                                <AppBarButton x:Name="DeleteGroupBtn" Icon="Delete" Click="DeleteGroupBtn_Click">
                                     <AppBarButton.KeyboardAccelerators>
                                         <KeyboardAccelerator Key="Delete" />
                                     </AppBarButton.KeyboardAccelerators>

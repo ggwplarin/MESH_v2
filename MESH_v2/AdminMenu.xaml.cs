@@ -28,6 +28,7 @@ namespace MESH_v2
             this.InitializeComponent();
         }
 
+       
         private void DeleteSelectedUser_Click(object sender, RoutedEventArgs e)
         {
             if (UsersGrid.SelectedItem != null)
@@ -180,6 +181,11 @@ namespace MESH_v2
                 DisciplinesList.ItemsSource = DataAccessClass.GetDisciplines();
             }
             
+        }
+
+        private void DeleteGroupBtn_Click(object sender, RoutedEventArgs e)
+        {
+             
         }
     }
 }

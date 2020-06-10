@@ -225,11 +225,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ExcelMapper">
+      <Version>5.0.160</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite">
       <Version>3.1.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Office.Interop.Excel">
+      <Version>15.0.4795.1000</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
       <Version>6.0.0</Version>
