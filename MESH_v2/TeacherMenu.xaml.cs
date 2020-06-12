@@ -1,17 +1,18 @@
 ﻿using DataAccessLib;
+
+//using Excel = Microsoft.Office.Interop.Excel;
+//using Windows.ApplicationModel.AppService;
+//using System.Threading;
+using Ganss.Excel;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-//using Excel = Microsoft.Office.Interop.Excel;
-//using Windows.ApplicationModel.AppService;
-using Windows.Foundation.Collections;
-//using System.Threading;
-using Ganss.Excel;
-
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,9 +31,12 @@ namespace MESH_v2
         private ObservableCollection<StudentGroup> groups = new ObservableCollection<StudentGroup>();
         private ObservableCollection<User> students = new ObservableCollection<User>();
         private ObservableCollection<Discipline> disciplines = new ObservableCollection<Discipline>();
+
         //private ObservableCollection<StudentMark> marks = new ObservableCollection<StudentMark>();
         private ObservableCollection<ObservableCollection<string>> studentMarks = new ObservableCollection<ObservableCollection<string>>();
+
         private ObservableCollection<string> markTypes = new ObservableCollection<string> { "5", "4", "3", "2", "НБ" };
+
         //static string tableName;
         //static int i1, i2;
         //static string[][] arrToExport;
@@ -51,12 +55,9 @@ namespace MESH_v2
             public string mark { get; set; }
         }
 
-
         // ebal rot uwp i microsoft
         //private void FillMarksGrid()
         //{
-            
-
         //    //studentMarks.Add(new ObservableCollection<string>((new List<string>() {  }).Concat)
         //    //studentMarks
         //}
@@ -83,7 +84,6 @@ namespace MESH_v2
 
         //private async static void Connection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
         //{
-
         //    string value = args.Request.Message["REQUEST"] as string;
         //    string result = "";
         //    switch (value)
@@ -141,10 +141,6 @@ namespace MESH_v2
         //    await args.Request.SendResponseAsync(response);
         //}
 
-
-
-
-
         //public void ExportMarks()
         //{
         //    if (GroupSelectionBox.SelectedIndex != -1 && DisciplineSelectionBox.SelectedIndex != -1)
@@ -155,8 +151,6 @@ namespace MESH_v2
         //        ObservableCollection<StudentMark> filtredMarks = new ObservableCollection<StudentMark>(marks.Where(m =>
         //        students.Select(s => s.Id).Contains(m.stId)));
         //        List<DateTimeOffset> dates = filtredMarks.Select(m => m.Date).Distinct().OrderBy(d => d).ToList();
-
-
 
         //        studentMarks = new ObservableCollection<ObservableCollection<string>>(dates.Select(d =>
         //        new ObservableCollection<string>(new List<string>() { "" }.Concat(filtredMarks.Select(m => m.Date == d ? m.Mark : "")))));
@@ -178,7 +172,7 @@ namespace MESH_v2
         //        //ex.Application.ActiveWorkbook.Close();
         //        //ex.Application.Quit();
 
-        //        // ща буит говнокод 
+        //        // ща буит говнокод
         //        //int column,row = 1;
 
         //        //foreach(string[] c in listToExport)
@@ -188,16 +182,11 @@ namespace MESH_v2
         //        // не, не буит
         //        InitializeAppServiceConnection();
 
-
         //    }
-
 
         //ExcelMapper excel = new ExcelMapper();
 
         //excel.Save($@"{ApplicationData.Current.LocalFolder.Path}\{tableName}",listToExport,0,true);
-
-
-
 
         //}
 
@@ -246,13 +235,12 @@ namespace MESH_v2
             {
                 DateTimeOffset date = MarkDatePicker.Date ?? DateTimeOffset.Now;
 
-                DataAccessClass.AddMark(selectedStudentId, date, selectedDiscipline.Id, selectedMark,DescriptionBox.Text);
+                DataAccessClass.AddMark(selectedStudentId, date, selectedDiscipline.Id, selectedMark, DescriptionBox.Text);
             }
         }
 
         private void ExportToExcelBtn_Click(object sender, RoutedEventArgs e)
         {
-
             //pohui//rabotaet
             //ExportMarks();
             if (GroupSelectionBox.SelectedIndex != -1 && DisciplineSelectionBox.SelectedIndex != -1)
@@ -263,12 +251,63 @@ namespace MESH_v2
                 {
                     marksToExport.Add(new Mark { date = m.Date.Date.ToString(), mark = m.Mark, student = students.Where(s => s.Id == m.stId).FirstOrDefault().Login });
                 }
-               
+
                 string tableName = $@"{ApplicationData.Current.LocalFolder.Path}\{(GroupSelectionBox.SelectedItem as StudentGroup).Title}_{DateTime.Now.Day}.xlsx";
                 ExcelMapper mapper = new ExcelMapper();
                 mapper.Save(tableName, marksToExport, "retards", true);
-                
+                var toastContent = new ToastContent()
+                {
+                    Visual = new ToastVisual()
+                    {
+                        BindingGeneric = new ToastBindingGeneric()
+                        {
+                            Children =
+                                        {
+                                            new AdaptiveText()
+                {
+                    Text = "Success!"
+                },
+                new AdaptiveText()
+                {
+                    Text = "Документ успешно экспортирован"
+                }
+            }
+                        }
+                    }
+                };
 
+                var toastNotif = new ToastNotification(toastContent.GetXml());
+
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+
+
+            }
+            else
+            {
+                var toastContent = new ToastContent()
+                {
+                    Visual = new ToastVisual()
+                    {
+                        BindingGeneric = new ToastBindingGeneric()
+                        {
+                            Children =
+                                        {
+                                            new AdaptiveText()
+                {
+                    Text = "Export error!"
+                },
+                new AdaptiveText()
+                {
+                    Text = "Группа и дисциплина обязательно должны быть выбраны."
+                }
+            }
+                        }
+                    }
+                };
+
+                var toastNotif = new ToastNotification(toastContent.GetXml());
+
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
             }
         }
     }
