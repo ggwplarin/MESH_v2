@@ -58,20 +58,22 @@
                                             <TextBox
                                                 x:Name="DisciplineTitleTBox"
                                                 Width="200"
-                                                Margin="8"
+                                                Margin="4"
+                                                Header="Title*"
                                                 PlaceholderText="Discipline title" />
                                             <ComboBox
                                                 x:Name="TeacherIdCBox"
                                                 Width="200"
-                                                Margin="8"
+                                                Margin="4"
                                                 DisplayMemberPath="Login"
+                                                Header="Teacher*"
                                                 PlaceholderText="Select teacher"
                                                 SelectedValuePath="Login" />
 
                                             <Button
                                                 x:Name="DisciplineAddConfirmBtn"
                                                 Width="200"
-                                                Margin="8"
+                                                Margin="4"
                                                 Click="DisciplineAddConfirmBtn_Click"
                                                 Content="Confirm" />
                                         </StackPanel>
@@ -80,7 +82,10 @@
                             </AppBarButton>
                             <!--<AppBarButton Icon="Filter" Label="Filter" />-->
                         </CommandBar>
-                        <ListView x:Name="DisciplinesList" Grid.Row="1" ItemsSource="{x:Bind disciplines}">
+                        <ListView
+                            x:Name="DisciplinesList"
+                            Grid.Row="1"
+                            ItemsSource="{x:Bind disciplines}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -142,9 +147,10 @@
                                                     x:Name="AddGroupTitleBox"
                                                     Width="200"
                                                     Margin="8"
-                                                    Header="Title" />
+                                                    Header="Title*" />
 
                                                 <AutoSuggestBox
+                                                    Header="Disciplines*"
                                                     x:Name="DisciplineSelectionASBox"
                                                     Width="200"
                                                     Margin="8"
@@ -200,14 +206,20 @@
                                 </AppBarButton>
 
                                 <AppBarSeparator />-->
-                                <AppBarButton x:Name="DeleteGroupBtn" Icon="Delete" Click="DeleteGroupBtn_Click">
+                                <AppBarButton
+                                    x:Name="DeleteGroupBtn"
+                                    Click="DeleteGroupBtn_Click"
+                                    Icon="Delete">
                                     <AppBarButton.KeyboardAccelerators>
                                         <KeyboardAccelerator Key="Delete" />
                                     </AppBarButton.KeyboardAccelerators>
                                 </AppBarButton>
                             </CommandBar.SecondaryCommands>
                         </CommandBar>
-                        <ListView Grid.Row="1" ItemsSource="{x:Bind studentGroups}" x:Name="GroupsList">
+                        <ListView
+                            x:Name="GroupsList"
+                            Grid.Row="1"
+                            ItemsSource="{x:Bind studentGroups}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -266,18 +278,18 @@
                                                 <TextBox
                                                     x:Name="AddUserLoginBox"
                                                     Width="200"
-                                                    Margin="8"
-                                                    Header="Login" />
+                                                    Margin="4"
+                                                    Header="Login*" />
                                                 <PasswordBox
                                                     x:Name="AddUSerPasswordBox"
                                                     Width="200"
-                                                    Margin="8"
-                                                    Header="Password" />
+                                                    Margin="4"
+                                                    Header="Password*" />
                                                 <ComboBox
                                                     x:Name="AddNewUserRoleCBox"
                                                     Width="200"
-                                                    Margin="8"
-                                                    Header="Role"
+                                                    Margin="4"
+                                                    Header="Role*"
                                                     SelectionChanged="AddNewUserRoleCBox_SelectionChanged">
                                                     <x:String>Admin</x:String>
                                                     <x:String>Teacher</x:String>
@@ -286,7 +298,7 @@
                                                 <ComboBox
                                                     x:Name="AddNewUserGroupCBox"
                                                     Width="200"
-                                                    Margin="8"
+                                                    Margin="4"
                                                     DisplayMemberPath="Title"
                                                     Header="Group"
                                                     IsEnabled="False"
@@ -295,7 +307,7 @@
                                                 <Button
                                                     x:Name="AddUserConfirmBtn"
                                                     Width="200"
-                                                    Margin="8"
+                                                    Margin="4"
                                                     Click="AddUserConfirmBtn_Click"
                                                     Content="Confirm" />
                                             </StackPanel>

@@ -67,6 +67,11 @@ namespace MESH_v2
                 AddNewUserRoleCBox.SelectedIndex = -1;
                 AddNewUserGroupCBox.SelectedIndex = -1;
                 AddNewUserFlyout.Hide();
+
+            }
+            else
+            {
+                DisplayEmptyFieldsDialog();
             }
         }
 
@@ -169,6 +174,10 @@ namespace MESH_v2
                 GroupsList.ItemsSource = DataAccessClass.GetGroups();
 
             }
+            else
+            {
+                DisplayEmptyFieldsDialog();
+            }
         }
 
         private void DisciplineAddConfirmBtn_Click(object sender, RoutedEventArgs e)
@@ -180,6 +189,10 @@ namespace MESH_v2
                 TeacherIdCBox.SelectedIndex = -1;
                 DisciplinesList.ItemsSource = DataAccessClass.GetDisciplines();
             }
+            else
+            {
+                DisplayEmptyFieldsDialog();
+            }
             
         }
 
@@ -187,5 +200,20 @@ namespace MESH_v2
         {
              
         }
+
+        private async void DisplayEmptyFieldsDialog()
+        {
+            ContentDialog noWifiDialog = new ContentDialog()
+            {
+                Title = "Ошибка: Пустые поля!",
+                Content = "Поля помеченные * обязательны, заполните их",
+                CloseButtonText = "Продолжить"
+            };
+
+            await noWifiDialog.ShowAsync();
+        }
+
+
+        
     }
 }
