@@ -12,26 +12,17 @@
 
     <Frame x:Name="AdminMainFrame">
         <Grid>
-            <Grid.Resources>
-                <DataTemplate x:Key="RowDetailsTemplate">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <CommandBar HorizontalAlignment="Left"
+                            Background="Transparent"
+                            DefaultLabelPosition="Right">
+                <AppBarButton Icon="Back" x:Name="GoBackBtn" Click="GoBackBtn_Click"/>
+            </CommandBar>
 
-                    <Grid Padding="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Name" />
-                        <TextBlock
-                            Grid.Column="1"
-                            HorizontalAlignment="Right"
-                            Text="{Binding Name}" />
-                    </Grid>
-                </DataTemplate>
-            </Grid.Resources>
-            <Pivot Title="Administrator">
+            <Pivot Grid.Row="1">
                 <PivotItem Header="Disciplines">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -150,11 +141,11 @@
                                                     Header="Title*" />
 
                                                 <AutoSuggestBox
-                                                    Header="Disciplines*"
                                                     x:Name="DisciplineSelectionASBox"
                                                     Width="200"
                                                     Margin="8"
                                                     DisplayMemberPath="Title"
+                                                    Header="Disciplines*"
                                                     PlaceholderText="Add discipline"
                                                     QueryIcon="Add"
                                                     QuerySubmitted="DisciplineSelectionASBox_QuerySubmitted"
@@ -329,7 +320,7 @@
                             AutoGenerateColumns="False"
                             CellEditEnded="UsersGrid_CellEditEnded"
                             ItemsSource="{x:Bind users}"
-                            RowDetailsTemplate="{StaticResource RowDetailsTemplate}"
+                            
                             RowDetailsVisibilityMode="Collapsed">
 
                             <controls:DataGrid.Columns>

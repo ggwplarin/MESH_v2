@@ -21,7 +21,7 @@
                 x:Name="goTecher"
                 Click="goTecher_Click"
                 Content="goTeacher" />
-            
+
         </StackPanel>
         <StackPanel
             HorizontalAlignment="Center"
@@ -40,21 +40,27 @@
                 FontFamily="Segoe MDL2 Assets" />
         </StackPanel>
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Rectangle Fill="{ThemeResource SystemControlPageBackgroundBaseLowBrush}" />
             <StackPanel>
+                <TextBlock
+                    Margin="10"
+                    FontSize="32"
+                    Text="Login" 
+                    HorizontalAlignment="Center"/>
                 <TextBox
                     x:Name="LoginMenuLoginBox"
                     Width="200"
-                    Margin="8"
-                    Header="Login" />
+                    Margin="10"
+                    PlaceholderText="Login" />
                 <PasswordBox
                     x:Name="LoginMenuPasswordBox"
                     Width="200"
-                    Margin="8"
-                    Header="Password" />
+                    Margin="10"
+                    PlaceholderText="Password" />
                 <Button
                     x:Name="LoginMenuConfirmBtn"
                     Width="200"
-                    Margin="8"
+                    Margin="10"
                     Click="LoginMenuConfirmBtn_Click"
                     Content="Confirm" />
             </StackPanel>

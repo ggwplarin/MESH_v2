@@ -11,57 +11,72 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Margin="10"
-            FontWeight="Bold"
-            Text="Teacher WIP" />
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <ComboBox
-                x:Name="GroupSelectionBox"
-                DisplayMemberPath="Title"
-                ItemsSource="{x:Bind groups}"
-                PlaceholderText="Group"
-                SelectedValuePath="Title"
-                SelectionChanged="GroupSelectionBox_SelectionChanged" />
-            <ComboBox
-                x:Name="DisciplineSelectionBox"
-                DisplayMemberPath="Title"
-                PlaceholderText="Discipline"
-                SelectedValuePath="Title"
-                SelectionChanged="DisciplineSelectionBox_SelectionChanged" />
+        <CommandBar
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            DefaultLabelPosition="Right">
+            <AppBarButton
+                x:Name="GoBackBtn"
+                Click="GoBackBtn_Click"
+                Icon="Back" />
+        </CommandBar>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Margin="10"
+                FontWeight="Bold"
+                Text="Teacher WIP" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <ComboBox
+                    x:Name="GroupSelectionBox"
+                    DisplayMemberPath="Title"
+                    ItemsSource="{x:Bind groups}"
+                    PlaceholderText="Group"
+                    SelectedValuePath="Title"
+                    SelectionChanged="GroupSelectionBox_SelectionChanged" />
+                <ComboBox
+                    x:Name="DisciplineSelectionBox"
+                    DisplayMemberPath="Title"
+                    PlaceholderText="Discipline"
+                    SelectedValuePath="Title"
+                    SelectionChanged="DisciplineSelectionBox_SelectionChanged" />
 
-            <ComboBox
-                x:Name="StudentSelectionBox"
-                DisplayMemberPath="Login"
-                ItemsSource="{x:Bind students}"
-                PlaceholderText="Student"
-                SelectedValuePath="Login"
-                SelectionChanged="StudentSelectionBox_SelectionChanged" />
-            <CalendarDatePicker x:Name="MarkDatePicker" />
-            <ComboBox
-                x:Name="MarkSelectionBox"
-                ItemsSource="{x:Bind markTypes}"
-                PlaceholderText="Mark"
-                SelectionChanged="MarkSelectionBox_SelectionChanged" />
-            <TextBox x:Name="DescriptionBox" PlaceholderText="Description" />
+                <ComboBox
+                    x:Name="StudentSelectionBox"
+                    DisplayMemberPath="Login"
+                    ItemsSource="{x:Bind students}"
+                    PlaceholderText="Student"
+                    SelectedValuePath="Login"
+                    SelectionChanged="StudentSelectionBox_SelectionChanged" />
+                <CalendarDatePicker x:Name="MarkDatePicker" />
+                <ComboBox
+                    x:Name="MarkSelectionBox"
+                    ItemsSource="{x:Bind markTypes}"
+                    PlaceholderText="Mark"
+                    SelectionChanged="MarkSelectionBox_SelectionChanged" />
+                <TextBox x:Name="DescriptionBox" PlaceholderText="Description" />
+                <Button
+                    x:Name="AddMarkBtn"
+                    Click="AddMarkBtn_Click"
+                    Content="Add mark" />
+            </StackPanel>
             <Button
-                x:Name="AddMarkBtn"
-                Click="AddMarkBtn_Click"
-                Content="Add mark" />
-        </StackPanel>
-        <Button
-            x:Name="ExportToExcelBtn"
-            HorizontalAlignment="Right"
-            Click="ExportToExcelBtn_Click"
-            Content="Export to Excel" />
-        <controls:DataGrid
-            x:Name="StudentsMarksGrid"
-            Grid.Row="2"
-            AutoGenerateColumns="True"
-            ItemsSource="{x:Bind studentMarks}" />
+                x:Name="ExportToExcelBtn"
+                HorizontalAlignment="Right"
+                Click="ExportToExcelBtn_Click"
+                Content="Export to Excel" />
+            <controls:DataGrid
+                x:Name="StudentsMarksGrid"
+                Grid.Row="2"
+                AutoGenerateColumns="True"
+                ItemsSource="{x:Bind studentMarks}" />
+        </Grid>
     </Grid>
 </Page>

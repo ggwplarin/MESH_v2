@@ -33,7 +33,6 @@ namespace MESH_v2
         public StudentMenu()
         {
             this.InitializeComponent();
-            DisplayBadCredentialsDialog();
         }
 
         private void DisciplineSelectionCBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -55,6 +54,14 @@ namespace MESH_v2
             };
 
             await noWifiDialog.ShowAsync();
+        }
+
+        private void GoBackBtn_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (this.Frame.CanGoBack)
+            {
+                this.Frame.GoBack();
+            }
         }
     }
 }

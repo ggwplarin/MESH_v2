@@ -17,7 +17,7 @@ namespace MESH_v2
         {
             DataAccessClass.InitializeDatabase();
             this.InitializeComponent();
-            gg.Text = ApplicationData.Current.LocalFolder.Path;
+            //gg.Text = ApplicationData.Current.LocalFolder.Path;
         }
 
         private void goAdmin_Click(object sender, RoutedEventArgs e)
@@ -45,7 +45,10 @@ namespace MESH_v2
                         case "Student":
                             this.Frame.Navigate(typeof(StudentMenu), temp);
                             break;
+                            
                     }
+                    LoginMenuLoginBox.Text = string.Empty;
+                    LoginMenuPasswordBox.Password = string.Empty;
                 }
                 else
                 {

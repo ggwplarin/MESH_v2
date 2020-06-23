@@ -1,4 +1,5 @@
 ﻿using DataAccessLib;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,7 +52,7 @@ namespace MESH_v2
         {
             string role = "";
             string group = "";
-            if ($"{AddNewUserRoleCBox.SelectedItem as string}" == "Student")
+            if ($"{AddNewUserRoleCBox.SelectedItem as string}" == "Student" && !String.IsNullOrEmpty( AddNewUserGroupCBox.SelectedItem  as string))
             {
                 group = $"{(AddNewUserGroupCBox.SelectedItem as StudentGroup).Title}";
             }
@@ -97,7 +98,10 @@ namespace MESH_v2
             {
                 users[UsersGrid.SelectedIndex].Group = "";
             }
-            DataAccessClass.ChangeUserData(users[UsersGrid.SelectedIndex].Id, users[UsersGrid.SelectedIndex].Login, users[UsersGrid.SelectedIndex].Password, users[UsersGrid.SelectedIndex].Role, users[UsersGrid.SelectedIndex].Group);
+            if ((UsersGrid.SelectedItem as User).Role != "Admin")
+            {
+                DataAccessClass.ChangeUserData(users[UsersGrid.SelectedIndex].Id, users[UsersGrid.SelectedIndex].Login, users[UsersGrid.SelectedIndex].Password, users[UsersGrid.SelectedIndex].Role, users[UsersGrid.SelectedIndex].Group);
+            }
         }
 
         private void AddNewGroupBtn_Click(object sender, RoutedEventArgs e)
@@ -213,7 +217,12 @@ namespace MESH_v2
             await noWifiDialog.ShowAsync();
         }
 
-
-        
+        private void GoBackBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame.CanGoBack)
+            {
+                this.Frame.GoBack();
+            }
+        }
     }
 }

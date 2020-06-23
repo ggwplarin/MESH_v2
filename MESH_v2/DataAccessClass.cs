@@ -7,6 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using Windows.Storage;
 using System.Globalization;
+using System.Linq;
 
 namespace DataAccessLib
 {
@@ -26,10 +27,13 @@ namespace DataAccessLib
                     "CREATE TABLE IF NOT EXISTS StudentsGroups (id_stgroups INTEGER PRIMARY KEY, groupTitle TEXT UNIQUE NOT NULL, groupDisciplines TEXT NOT NULL);" +
                     "CREATE TABLE IF NOT EXISTS StudentsMarks (studentId INT NOT NULL, date BLOB NOT NULL,disciplineId INT NOT NULL, mark TEXT NOT NULL, description TEXT, FOREIGN KEY (studentId) REFERENCES Users(id_users) ON DELETE CASCADE);" +
                     "PRAGMA foreign_keys = ON;";
+                   
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
+                var t = !DataAccessClass.GetUsers().Any(u=>u.Role == "Admin") ? DataAccessClass.AddUser("Admin", "Admin", "Admin", "") : 0;
+
                 db.Close();
             }
         }
@@ -117,16 +121,16 @@ namespace DataAccessLib
 
                 String tableCommand = $"UPDATE users SET login = '{login}', password = '{password}', userRole = '{role}', userGroup = '{group}' WHERE id_users = {id}";
 
-                //try
-                //{
-                SqliteCommand command = new SqliteCommand(tableCommand, db);
+                try
+                {
+                    SqliteCommand command = new SqliteCommand(tableCommand, db);
 
-                command.ExecuteReader();
-                //}
-                //catch (SqliteException)
-                //{
-                //    return -1;
-                //}
+                    command.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    return -1;
+                }
                 db.Close();
             }
             return 0;
@@ -141,16 +145,16 @@ namespace DataAccessLib
 
                 String tableCommand = $"DELETE FROM users WHERE id_users = {id}";
 
-                //try
-                //{
+                try
+                {
                     SqliteCommand command = new SqliteCommand(tableCommand, db);
 
                     command.ExecuteReader();
-                //}
-                //catch (SqliteException)
-                //{
-                //    return 1;
-                //}
+                }
+                catch (SqliteException)
+                {
+                    return 1;
+                }
                 db.Close();
             }
             return 0;
